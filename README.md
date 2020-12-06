@@ -63,6 +63,60 @@ ajax.js  封装ajax
 index.js  配置api 接口函数
 
 #git 管理项目
-1. git init  生成本地仓库(初始化仓库) 
-2. git add   添加文件到暂存区
-3. git commit  将暂存区内容添加到仓库中
+1. git init  生成本地仓库(初始化仓库)
+2. git add .   添加文件到暂存区
+3. git commit -m "message" 将暂存区内容添加到仓库中 message = 描述信息 “init myproject”
+4. git remote add origin https://github.com/alenchome/my-project.git 关联命令
+5. git push origin master 提交代码
+
+# vuex  1.解决不同组件的数据共享 2.组件里面的数据持久化
+# 组件通过dispatch调用action，action通过commit来触发mutation，mutation来负责修改state，state修改后去重新渲染受影响的dom。
+1. 新建vuex 文件夹
+2. 新建store.js , 引入vue 和 vuex ,并且使用vuex
+3. 创建store ，store 是核心
+  const store = new Vuex.Store({
+
+  })
+4. state 定义状态 ； 放数据 ，主运用于存储数据 是一个对象
+  state: {
+    count: 0
+  }
+5. mutations 定义方法； 里面放的是方法 改变state里面的数据
+  mutations: {
+    increment(state){   //操作state 里面的数据count 自加
+      state.count++
+    }
+  }
+6. 在其他组件里面显示 数据
+  import store form './vuex/store/store.js'      //引入state
+
+  export default {
+    store                                        // 实例中注册 store
+  }
+
+ 7. 在组件中使用state 里面的数据  ,通过store.state 获取状态对象
+  {{this.$store.state.count}}
+
+ 8. 在组件中改变state 里面的数据 ,通过 store.mutations 来触发改变状态
+  store 里面的状态是响应式的，当前组件改变状态后，其他组件调用的状态（state）改变
+  export default {
+    store,
+    method: {
+      this.$store.commit('increment')    //当前组件 可以使用 increment 函数来改变 state 里面的数据了
+    }
+  }
+
+9. getter 相当于sate 的计算属性，当state里面的状态发生改变时触发
+  getters: {
+  }
+  getter 会暴露 为store.getters 对象； 因此可以以属性的形式访问这些值
+  this.$store.getters.donesonthing
+
+10. action 类似于mutation  action 函数接收一个与store 实例具有相同方法和属性的 context 对象
+  actions: {
+    increament (context) {
+      context.commit ('increment')
+    }
+  }
+  实例中触发 是以store.dispatch('increment') 方法来触发
+  action 里面可以执行异步请求

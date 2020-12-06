@@ -7,8 +7,12 @@
 
 <script>
 import btmlist from './components/btmlist.vue'
+
 export default {
-  name: 'App',
+
+  mounted() {
+    this.$store.dispatch('getAddress')
+  },
   components: {
     btmlist
   }
