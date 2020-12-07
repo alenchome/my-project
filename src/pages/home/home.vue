@@ -1,6 +1,6 @@
 <template>
   <div class="homemain">
-    <headertop pagetitle="武汉市武昌区东亭黄鹂路东亭小区岳家嘴南路">
+    <headertop :pagetitle="address.name">
       <div class="left" slot="left">
       	<span class="iconfont icon-search"></span>
       </div>
@@ -12,102 +12,10 @@
   	<div class="imgshow">
       <div class="swiper-container">
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
-            	<div class="mimglist">
+            <div class="swiper-slide" v-for="(categorys,index) in categoryarr" :key="index">
+            	<div class="mimglist" v-for="(category,index) in categorys" :key='index'>
             		<span class="iconfont icon-map"></span>
-            		<span>外卖</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>美食</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>酒店</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>休闲</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>电影</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>打车</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>理发</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>红包</span>
-            	</div>
-            </div>
-            <div class="swiper-slide">
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>充值</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>福利</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>周边/旅游</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>医疗</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>景点</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>美容</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>健身</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>学习</span>
-            	</div>
-            </div>
-            <div class="swiper-slide">
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>洗浴</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>密室</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>酒吧</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>宠物</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>公益</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>上门</span>
-            	</div>
-            	<div class="mimglist">
-            		<span class="iconfont icon-map"></span>
-            		<span>缴费</span>
+            		<span>{{category.title}}</span>
             	</div>
             </div>
         </div>
@@ -127,6 +35,7 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   import Swiper from 'swiper'
   import 'swiper/dist/css/swiper.css'
   import headertop from '../../components/headertop.vue'
@@ -134,18 +43,43 @@
 
   export default {
     mounted() {
-      //创建swiper 对象
-      new Swiper('.swiper-container',{
-        loop: true,
-        pagination: {
-              el: '.swiper-pagination',
-           }
-      })
+      this.$store.dispatch('getCategorys') //发送异步请求 ,触发action 将数据保存到state
     },
     name: 'home',
     components: {
       headertop,
       shoplist
+    },
+    computed: {
+      ...mapState(['address','categorys']),  // 获取state 里面的数据
+      categoryarr: function(){               //将 state 里categorys 转化为二维数组 返回给 categorysarr
+        const {categorys} = this
+        const arrmax = []
+        let arrmin = []
+        categorys.forEach(function(v){
+          if(arrmin.length==8){
+            arrmin=[]
+          }
+          if(arrmin.length==0){
+            arrmax.push(arrmin)
+          }
+          arrmin.push(v)
+        })
+      return arrmax
+      }
+    },
+    watch: {                                        //数据是异步过来的，所以创建 swiper 要在数据过来之后生成
+      categoryarr(value){                           //vue是数据更新完之后，再去重新渲染dom
+        this.$nextTick(()=>{                         //数据改变(更新)之后，立马使用 vue.nexttick
+          //创建swiper 对象                          //会在dom 重新渲染之后 立即执行 vue.nexttick
+          new Swiper('.swiper-container',{
+            loop: true,
+            pagination: {
+                  el: '.swiper-pagination',
+               }
+          })
+        })
+      }
     }
   }
 </script>
@@ -204,5 +138,5 @@
   	font-size: 22px;
   	color: coral;
   }
-  
+
 </style>

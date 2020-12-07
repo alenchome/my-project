@@ -120,3 +120,35 @@ index.js  配置api 接口函数
   }
   实例中触发 是以store.dispatch('increment') 方法来触发
   action 里面可以执行异步请求
+
+11. 建议使用 映射关系
+  mapState > computed
+  mapMutationns > methods
+  mapActions > methsods
+  mapGetters > computed
+
+  state 是核心不推荐从store 中取值，建议将store.state 中的属性映射到computed
+    import {mapState} from  'vuex'  //引入
+    computed: {
+      ...mapstates(['address','shops'])  // 可映射多个属性 方便书写
+    }
+
+  mutations 使用 $store.commit 来触发
+    <button @click="$store.commit('add',5)">a+5</button>  //不建议直接调用触发
+    import {mapMutations} from  'vuex'  //引入
+    methods: {
+      ...mapmutations(['getaddress','add'])      //将store.mutations映射到methods
+    }
+
+   推荐actions去触发mutation
+   使用 $store.dispatch 来触发actions
+    <button @click="$store.dispatch('addA',5)">a+5</button>
+    import {mapActions} from 'vuex';
+    methods:{
+      ...mapAtions(['addA'])   //将store.actions映射到methods
+    }
+
+    import {mapGetters} from 'vuex';
+    computed: {
+      ...mapgetters(['geta','getb'])
+    }
