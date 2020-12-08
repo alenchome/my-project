@@ -7,8 +7,9 @@
 					</div>
 					<div class="shoplist-right">
 		        <h4 class="ellipsis">{{shop.name}}</h4>
-		        <p><span>评分：{{shop.rating}}</span><span>月售{{shop.recent_order_num}}单</span><p>
-		        <p>￥{{shop.float_minimum_order_amount}}起送 | {{shop.piecewise_agent_fee.tips}}</p>
+            <ratingstar :score="shop.rating"> </ratingstar>
+            <p>月售 {{shop.recent_order_num}} 单<p>
+		        <p>￥{{shop.float_minimum_order_amount}} 起送 | {{shop.piecewise_agent_fee.tips}}</p>
 		        <div class="activity">
 		        	<p class="ellipsis">{{shop.promotion_info}}</p>
 		        	<p class="ellipsis">{{shop.description}}</p>
@@ -21,6 +22,7 @@
 
 <script>
   import {mapState} from 'vuex'
+  import ratingstar from '../rating/ratingstar.vue'
   export default{
     mounted() {
       this.$store.dispatch('getshops')
@@ -28,7 +30,10 @@
     computed:{
       ...mapState(['shops'])
     },
-    name: 'shoplist'
+    name: 'shoplist',
+    components: {
+      ratingstar
+    }
   }
 </script>
 
@@ -64,9 +69,6 @@
   }
   .shoplist-right p{
   	line-height: 20px;
-  }
-  .shoplist-right p span:first-child{
-  	margin-right: 20px;
   }
   .shoplist-right .activity{
   	margin-top: 8px;

@@ -10,7 +10,7 @@
     </headertop>
     <!--轮播开始-->
   	<div class="imgshow">
-      <div class="swiper-container">
+      <div class="swiper-container" v-if="categorys.length">
         <div class="swiper-wrapper">
             <div class="swiper-slide" v-for="(categorys,index) in categoryarr" :key="index">
             	<div class="mimglist" v-for="(category,index) in categorys" :key='index'>
@@ -22,6 +22,7 @@
         <!-- 如果需要分页器 -->
         <div class="swiper-pagination"></div>
       </div>
+      <div v-else><img src="../../../static/images/msite_back.svg"></div>
   	</div>
   	<!--商家列表-->
   	<div class="shops">
