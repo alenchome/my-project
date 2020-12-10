@@ -152,3 +152,7 @@ index.js  配置api 接口函数
     computed: {
       ...mapgetters(['geta','getb'])
     }
+
+
+12. 模板中数据的来源， data ，props， computed
+计算属性 computed 中的数据来源 data ，props ,state ,getter 
