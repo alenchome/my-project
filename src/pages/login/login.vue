@@ -4,7 +4,7 @@
     	<span class="iconfont icon-arrow-left" @click="$router.back()"></span>
   	</div>
     <div class="login">
-      <form @submit.prevent="check">
+      <form @submit.prevent="login">
       <div class="login-title">
                  用户登录
       </div>
@@ -13,12 +13,12 @@
       </div>
       <div class="login-message"  v-show="num==0">
         <div class="input-box">
-          <input type="number" value="" placeholder="手机号" v-model="phone"/>
-          <button :disabled="!disabled" class="code" @click.prevent="cuttime">{{codetext}}</button>
+          <input type="tel" value="" placeholder="手机号" v-model="phone"/>
+          <button :disabled="!okphone" class="code" @click.prevent="getcode">{{ sendtime>0 ? ('重新发送 '+ sendtime +' s') : '发送验证码' }}</button>
         </div>
         <div class="input-box">
-          <input type="number"  value="" placeholder="验证码" v-model="code"/>
-          
+          <input type="text"  value="" placeholder="验证码" v-model="code"/>
+
         </div>
         <p>温馨提示：未注册的手机号，短信登录会自动注册，且代表已同意<span class="agreement">《用户服务协议》</span></p>
       </div>
@@ -32,7 +32,8 @@
           <span class="iconfont icon-browse" :class="{eyec:showeye}" @click="showeye=!showeye"></span>
         </div>
         <div class="input-box">
-          <input type="text"  value="" placeholder="验证码" v-model="captcha"/><img class="captcha" src="../../pages/login/images/captcha.svg" />
+          <input type="text"  value="" placeholder="验证码" v-model="captcha"/>
+          <img class="captcha" src="http://localhost:4000/captcha" @click="getcaptcha" ref="captcha"/>
         </div>
       </div>
       <div class="login-btn">
@@ -44,6 +45,7 @@
 </template>
 
 <script>
+  import {reqSendcode,reqLoginSms,reqLoginPwd} from '../../api/index.js'
   export default {
     name: 'login',
     data(){
@@ -59,50 +61,99 @@
         name: '',
         pwd: '',
         captcha: '',
-        sendtime: 60,
-        disabled: true,
+        sendtime: 0,
         codetext: '发送验证码'
       }
     },
+    computed: {
+      okphone: function(){
+          return /^1[3584]\d{9}$/.test(this.phone)
+      }
+    },
     methods: {
-      cuttime: function(){
-        this.sendtime --
-        this.disabled= false
-        this.sendtime >0 ? (this.codetext='重新发送 '+ this.sendtime+' s') : (this.codetext='发送验证码')
-        if(this.sendtime>0){
-          setTimeout(this.cuttime,1000)
-        }else{
-          clearTimeout(this.cuttime)
-          this.disabled= true
-          this.sendtime= 60
+      // 获取验证码 倒计时 ； 异步获取验证码也在 倒计时中
+      async getcode(){
+        if(!this.sendtime){  //已经在倒计时中时，不可再次倒计时
+          this.sendtime = 60
+          let cuttime = setInterval(()=>{
+            this.sendtime--
+            if(this.sendtime <=0){
+              clearInterval(cuttime)
+            }
+          },1000)
+          // 同步请求获取手机验证码
+          const result = await reqSendcode(this.phone)
+          if(result.code===0){
+            //验证码发送成功
+            console.log('发送成功')
+          } else{
+            //验证码发送失败  返回失败数据，停止计时
+            alert(result.msg)
+            if(this.sendtime){
+              this.sendtime = 0
+              clearInterval(cuttime)
+              cuttime = undefined
+            }
+          }
         }
       },
-      check: function(){
-        if(this.num===0){  //手机号码登录
-          const okphone=/^1[3584]\d{9}$/.test(this.phone)
-          if(!okphone){
+      async login (){
+        // 验证前端表单信息
+        if(this.num===0){     //手机号码登录
+          if(!this.okphone){
             alert('请输入正确11位手机号')
             return false
-          }
-          if(!(/^\d{6}$/).test(this.code)){
+          }else if(!(/^\d{6}$/).test(this.code)){
             alert("请输入正确6位数字验证码")
             return false
           }
-        }else{               // 用户名 密码登录方式
+          //发送异步登录请求
+          let result = await reqLoginSms(this.phone,this.code)
+          if(result.code===0){
+            let userinfo = result.data // 获取用户信息（根据api）
+            //登陆成功后，将数据存入state, 且路由跳转至用户中心
+            this.$store.dispatch('getuserinfosms',userinfo)
+            localStorage.setItem('userid',userinfo._id)   //将userid 保存到本地
+            this.$router.replace('/mcenter')
+          } else{
+            //登陆失败
+            alert(result.msg)
+            this.code = null
+            if(this.sendtime){
+              this.sendtime = 0
+              clearInterval(cuttime)
+              cuttime = undefined
+            }
+          }
+        } else {             // 用户名 密码登录方式
           if(!this.name){
             alert("请输入用户名")
             return false
-          }
-          if(!this.pwd){
+          }else if(!this.pwd){
             alert("请输入密码")
             return false
-          }
-          if(!(/^\w{4}$/).test(this.captcha)){
+          }else if(!(/^\w{4}$/).test(this.captcha)){
             alert("请输正确4位图形验证码")
             return false
           }
+          // 发送请求
+          let result = await reqLoginPwd(this.name,this.pwd,this.captcha)
+          if(result.code===0){
+            let userinfo = result.data // 获取用户信息（根据api）
+            //登陆成功后，将数据存入state, 且路由跳转至用户中心
+            this.$store.dispatch('getuserinfopwd',userinfo)
+            localStorage.setItem('userid',userinfo._id)
+            this.$router.replace('/mcenter')
+          } else {
+            //登陆失败  刷新验证码
+            alert(result.msg)
+            this.getcaptcha()
+          }
         }
-
+      },
+      //获取一次性图形验证码
+      getcaptcha: function(){
+        this.$refs.captcha.src = 'http://localhost:4000/captcha?' + Date.now()
       }
     }
   }

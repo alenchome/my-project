@@ -32,6 +32,9 @@
   .header .left span, .header .right span{
   	font-size: 20px;
   }
+  .right p{
+    font-size: 12px;
+  }
 .left, .title, .right{
   	padding: 0 10px;
   }

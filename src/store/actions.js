@@ -4,12 +4,20 @@
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
-  RECEIVE_SHOPS
+  RECEIVE_SHOPS,
+  RECEIVE_LOGINPWD,
+  RECEIVE_LOGINSMS,
+  RECEIVE_LOGINOUT,
+  RECEIVE_USERINFO
 } from './mutation-types.js'
 import {
   reqAddress,
   reqFoodCategorys,
-  reqShops
+  reqShops,
+  reqLoginPwd,
+  reqLoginSms,
+  reqLoginOut,
+  reqUserInfo
 } from '../api/index.js'
 
 export default {
@@ -45,4 +53,33 @@ export default {
       commit(RECEIVE_SHOPS,{shops})
     }
   },
+
+  //手机号成功登录,保存信息到 state
+  getuserinfosms({commit},userinfo){
+      commit(RECEIVE_LOGINSMS,{userinfo})
+  },
+
+  //账号密码验证码成功登录，保存到 state
+  getuserinfopwd({commit},userinfo){
+      commit(RECEIVE_LOGINPWD,{userinfo})
+  },
+
+  //退出登录
+  async loginout({commit}){
+    const result = await reqLoginOut()
+    if(result.code === 0){
+      const userinfo= {}
+      commit(RECEIVE_LOGINOUT,{userinfo})
+    }
+  },
+
+  //获取用户信息
+  async userinfo({commit}){
+    const result = await reqUserInfo()
+    if(result.code === 0){
+      const userinfo = result.data
+      commit(RECEIVE_USERINFO,{userinfo})
+    }
+  }
+
 }

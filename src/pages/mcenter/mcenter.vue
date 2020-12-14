@@ -2,14 +2,14 @@
   <div class="mcentermain">
   	<headertop pagetitle="我的"></headertop>
   	<div class="user">
-      <router-link to="/login">
+      <router-link :to=" userinfo._id ? '/setuserinfo' : '/login' ">
         <div class="user-info">
         	<div class="userimg">
         		<img src="../../../src/pages/mcenter/images/user.jpeg"/>
         	</div>
         	<div class="userdetails">
-        		<p>登录/注册</p>
-        		<p><span class="iconfont icon-phone"></span>暂无绑定手机号</p>
+        		<p v-if="!userinfo.phone"> {{ userinfo.name ? userinfo.name : '登录/注册'  }} </p>
+        		<p><span class="iconfont icon-phone"></span>{{ userinfo.phone ? userinfo.phone : '暂无绑定手机号'}}</p>
         	</div>
         	<div class="userset">
         		<span class="iconfont icon-arrow-right"></span>
@@ -43,13 +43,28 @@
     		<span class="iconfont icon-service lefticon"></span>服务中心<span class="iconfont icon-arrow-right righticon"></span>
     	</div>
   	</div>
+    <div class="layout" v-if=" userinfo._id" @click="loginout">退出登录</div>
   </div>
 </template>
 
 <script>
+  import {mapState} from 'vuex'
 	import headertop from '../../components/headertop.vue'
   export default {
     name: 'mcenter',
+    computed:{
+      ...mapState(['userinfo'])
+    },
+    methods:{
+      loginout: function(){
+        let sure = confirm('确定要退出吗')
+        if (sure  === true) {
+          this.$store.dispatch('loginout')
+        } else{
+          //不取消
+        }
+      }
+    },
     components: {
       headertop
     }
@@ -138,4 +153,13 @@
 		float: right;
 		font-size: 22px;
 	}
+  .layout{
+    margin-top: 40px;
+    width: 100%;
+    height: 40px;
+    background-color: crimson;
+    text-align: center;
+    color: white;
+    line-height: 40px;
+  }
 </style>

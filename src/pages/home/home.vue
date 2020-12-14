@@ -1,11 +1,12 @@
 <template>
   <div class="homemain">
     <headertop :pagetitle="address.name">
-      <div class="left" slot="left">
-      	<span class="iconfont icon-search"></span>
+      <div class="left" slot="left" @click="$router.replace('/search')">
+        <span class="iconfont icon-search"></span>
       </div>
       <div class="right" slot="right">
-      	<span class="iconfont icon-usercenter"></span>
+        <p v-if="!userinfo._id" @click="$router.push('/login')">登录/注册</p>
+      	<span class="iconfont icon-usercenter" v-else @click="$router.replace('/mcenter')"></span>
       </div>
     </headertop>
     <!--轮播开始-->
@@ -52,7 +53,7 @@
       shoplist
     },
     computed: {
-      ...mapState(['address','categorys']),  // 获取state 里面的数据
+      ...mapState(['address','categorys','userinfo']),  // 获取state 里面的数据
       categoryarr: function(){               //将 state 里categorys 转化为二维数组 返回给 categorysarr
         const {categorys} = this
         const arrmax = []
@@ -67,7 +68,16 @@
           arrmin.push(v)
         })
       return arrmax
+      },
+      userstatus(){
+        const {userinfo} = this
+        if(localStorage.key == userinfo._id){
+          this.$store.commit('RECEIVE_USERINFO',{userinfo})
+        } else{
+          localStorage.removeItem('userid')
+        }
       }
+
     },
     watch: {                                        //数据是异步过来的，所以创建 swiper 要在数据过来之后生成
       categoryarr(value){                           //vue是数据更新完之后，再去重新渲染dom

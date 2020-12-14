@@ -4,7 +4,11 @@
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
-  RECEIVE_SHOPS
+  RECEIVE_SHOPS,
+  RECEIVE_LOGINSMS,
+  RECEIVE_LOGINPWD,
+  RECEIVE_LOGINOUT,
+  RECEIVE_USERINFO
 } from './mutation-types.js'
 
 export default {
@@ -19,4 +23,18 @@ export default {
   [RECEIVE_SHOPS](state, {shops}) {
     state.shops = shops
   },
+  [RECEIVE_LOGINSMS](state, {userinfo}) {
+    state.userinfo = userinfo
+  },
+  [RECEIVE_LOGINPWD](state, {userinfo}) {
+    state.userinfo = userinfo
+  },
+  [RECEIVE_LOGINOUT](state, {userinfo}) {
+    state.userinfo = userinfo
+  },
+  [RECEIVE_USERINFO](state, {userinfo}) {
+    state.userinfo = userinfo
+  }
+
+
 }
