@@ -5,6 +5,7 @@ import search from '../pages/search/search.vue'
 import order from '../pages/order/order.vue'
 import mcenter from '../pages/mcenter/mcenter.vue'
 import login from '../pages/login/login.vue'
+import shops from '../pages/shops/shops.vue'
 
 Vue.use(Router)
 
@@ -47,6 +48,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: login
+    },
+    {
+      path: '/shops',
+      name: 'shops',
+      component: shops,
     },
     {
       path: '/',
