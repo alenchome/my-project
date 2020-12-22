@@ -92,7 +92,7 @@
 	    	<div>评论</div>
 	    	<div>商家</div>
 	    </div>
-        <div class="foods" style="display: none;">
+        <div class="foods">
         	<div class="foodcategrys">
         		<ul>
         			<li><span></span>优惠</li>
@@ -166,6 +166,47 @@
         			</ul>
         		</div>
         	</div>
+        </div>
+        <div class="ordercart">
+        	<div class="orderdetail">
+        		<span class="iconfont icon-cart-Empty"></span>
+        		<span class="ordercount">6</span>
+        	</div>
+        	<div class="orderprice">
+        		<p>￥0</p>
+        		<p>配送费 ￥4元</p>
+        	</div>
+        	<div class="pay">
+        		￥20元起送
+        	</div>
+            <div class="cartlist">
+            	<div class="carttitle">
+            		购物车<span>清空购物车</span>
+            	</div>
+            	<ul>
+            		<li>
+            			<div>南瓜粥</div>
+            			<div>￥9</div>
+            			<div class="change">
+            				<span class="iconfont icon-reduce"></span><span>2</span><span class="iconfont icon-add-fill"></span>
+            			</div>
+            		</li>
+            		<li>
+            			<div>麻婆豆腐</div>
+            			<div>￥12</div>
+            			<div class="change">
+            				<span class="iconfont icon-reduce"></span><span>1</span><span class="iconfont icon-add-fill"></span>
+            			</div>
+            		</li>
+            		<li>
+            			<div>南瓜粥</div>
+            			<div>￥9</div>
+            			<div class="change">
+            				<span class="iconfont icon-reduce"></span><span>2</span><span class="iconfont icon-add-fill"></span>
+            			</div>
+            		</li>
+            	</ul>
+            </div>
         </div>
 	    <div class="ratings" style="display: none;">
 	    	<div class="shoprating">
@@ -246,7 +287,26 @@
 	        		</li>
 	        	</ul>
 	        </div>
+
 	    </div>
+		<div class="shopstory" style="display: none;">
+			<div class="delivery">
+				<h4>配送信息</h4>
+				<p><span>蜂鸟配送</span>由商家配送提供配送，距离1000米</p>
+				<p>配送费用 ￥4</p>
+			</div>
+			<div class="shop-service">
+				<h4>活动与服务</h4>
+				<p><span>首单</span>新用户下单立减17元（不与其他活动同享）</p>
+				<p><span>满减</span>满39减15，满65减35</p>
+				<p><span>特价</span>【立减19.5】欢乐小食谱</p>
+				<p><span>特价</span>【立减19.5】欢乐小食谱</p>
+				<p><span>特价</span>【立减19.5】欢乐小食谱</p>
+				<p><span>特价</span>【立减19.5】欢乐小食谱</p>
+				<p><span>特价</span>【立减19.5】欢乐小食谱</p>
+				<p><span>特价</span>【立减19.5】欢乐小食谱</p>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -589,6 +649,109 @@
 		vertical-align:2px;
 		padding: 0 5px;
 	}
+ 	.ordercart{
+ 		position: fixed;
+ 		bottom: 0;
+ 		width: 100%;
+ 		height: 40px;
+ 		background-color: black;
+ 		color: white;
+ 		display: flex;
+ 		flex-direction: row;
+ 		flex-wrap: nowrap;
+ 		justify-content: space-between;
+ 		align-items: center;
+ 		font-size: 11px;
+ 	}
+ 	.orderdetail{
+ 		width: 40px;
+ 		height: 40px;
+ 		background-color:#444444;
+ 		border-radius: 24px;
+ 		margin-left: 10px;
+ 		margin-top: -20px;
+        border: 4px solid black;
+ 	}
+ 	.orderdetail .icon-cart-Empty{
+ 		font-size: 22px;
+ 		display: block;
+ 		margin-left: 9px;
+ 		margin-top: 8px;
+ 	}
+ 	.orderdetail .ordercount{
+ 		position: absolute;
+ 		left: 45px;
+ 		top: -15px;
+ 		background-color: red;
+ 		color: white;
+ 		padding:0 5px;
+ 		border-radius: 5px;
+ 	}
+ 	.orderprice{
+ 		flex-grow: 1;
+ 		margin-left: 20px;
+ 	}
+ 	.orderprice p:nth-child(1){
+ 		font-weight: bold;
+ 		font-size: 14px;
+ 		line-height: 20px;
+ 	}
+ 	.orderprice p:nth-child(2){
+ 		color: wheat;
+ 	}
+ 	.pay{
+ 		background-color: #333;
+ 		height: 100%;
+ 		padding: 0 20px;
+ 		line-height: 40px;
+ 	}
+    .cartlist{
+    	position: absolute;
+    	width: 100%;
+    	bottom: 40px;
+    	background-color: white;
+    	color: #333;
+    	z-index: -1;
+    }
+    .carttitle{
+    	height: 30px;
+    	line-height: 30px;
+    	background-color: whitesmoke;
+    	padding: 0 10px;
+    }
+    .carttitle span{
+    	display: inline-block;
+    	float: right;
+    }
+    .cartlist li{
+    	display: flex;
+    	flex-direction: row;
+    	flex-wrap: nowrap;
+    	justify-content: space-between;
+    	line-height: 30px;
+    	padding: 0 10px;
+    	margin-top: 10px;
+    	border-bottom: 1px dashed #DCDCDC;
+    }
+    .cartlist li div:nth-child(1){
+    	flex-grow: 1;
+    }
+	.cartlist li div:nth-child(2){
+		margin: 0 10px;
+		color: orangered;
+	}
+	.change .icon-reduce{
+		color: green;
+		font-size: 18px;
+	}
+	.change .icon-add-fill{
+		color: green;
+		font-size: 18px;
+	}
+	.change span:nth-child(2){
+		vertical-align:2px;
+		padding: 0 4px;
+	}
 	.ratings{
 		padding: 10px;
 		border-top: 1px solid #cdcdcd;
@@ -655,4 +818,27 @@
     	border-radius: 3px;
     	margin-left: 5px;
     }
+	.shopstory{
+		font-size: 11px;
+		padding: 10px;
+		margin-top: 10px;
+	}
+	.shopstory h4{
+		font-size: 13px;
+		font-weight: bold;
+		line-height: 40px;
+	}
+	.shopstory p{
+		line-height: 20px;
+	}
+	.delivery p span{
+		color: deepskyblue;
+		margin-right: 10px;
+	}
+	.shop-service p span{
+		padding: 0 3px;
+		border: 1px solid orange;
+		margin-right: 5px;
+		color: orangered;
+	}
 </style>
