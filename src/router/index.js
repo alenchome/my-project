@@ -6,6 +6,9 @@ import order from '../pages/order/order.vue'
 import mcenter from '../pages/mcenter/mcenter.vue'
 import login from '../pages/login/login.vue'
 import shops from '../pages/shops/shops.vue'
+import goods from '../pages/shops/goods/goods.vue'
+import rating from '../pages/shops/rating/rating.vue'
+import shopinfo from '../pages/shops/shopinfo/shopinfo.vue'
 
 Vue.use(Router)
 
@@ -51,8 +54,28 @@ export default new Router({
     },
     {
       path: '/shops',
-      name: 'shops',
       component: shops,
+      children: [
+        {
+          path: '/shops/goods',
+          name: 'goods',
+          component: goods
+        },
+        {
+          path: '/shops/rating',
+          name: 'rating',
+          component: rating
+        },
+        {
+          path: '/shops/shopinfo',
+          name: 'shopinfo',
+          component: shopinfo
+        },
+        {
+          path: '/',
+          redirect: '/shops/goods'
+        }
+      ]
     },
     {
       path: '/',
