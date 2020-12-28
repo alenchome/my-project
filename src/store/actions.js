@@ -8,7 +8,10 @@ import {
   RECEIVE_LOGINPWD,
   RECEIVE_LOGINSMS,
   RECEIVE_LOGINOUT,
-  RECEIVE_USERINFO
+  RECEIVE_USERINFO,
+  RECEIVE_SHOPINFO,
+  RECEIVE_SHOPGOODS,
+  RECEIVE_SHOPRATINGS
 } from './mutation-types.js'
 import {
   reqAddress,
@@ -17,7 +20,10 @@ import {
   reqLoginPwd,
   reqLoginSms,
   reqLoginOut,
-  reqUserInfo
+  reqUserInfo,
+  reqShopInfo,
+  reqShopGoods,
+  reqShopRatings
 } from '../api/index.js'
 
 export default {
@@ -80,6 +86,30 @@ export default {
       const userinfo = result.data
       commit(RECEIVE_USERINFO,{userinfo})
     }
-  }
+  },
+  //获取商铺信息
+  async shopinfo({commit}){
+    const result = await reqShopInfo()
+    if(result.code === 0){
+      const shopinfo= result.data
+      commit(RECEIVE_SHOPINFO,{shopinfo})
+    }
+  },
+  //获取商铺分类
+  async shopgoods({commit}){
+    const result = await reqShopGoods()
+    if(result.code === 0){
+      const shopgoods= result.data
+      commit(RECEIVE_SHOPGOODS,{shopgoods})
+    }
+  },
+  //获取商铺评论
+  async shopratings({commit}){
+    const result = await reqShopRatings()
+    if(result.code === 0){
+      const shopratings= result.data
+      commit(RECEIVE_SHOPRATINGS,{shopratings})
+    }
+  },
 
 }

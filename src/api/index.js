@@ -25,3 +25,8 @@ export const reqLoginSms = (phone,code) => ajax('/api/login_sms',{phone,code},'P
 export const reqUserInfo = () => ajax('/api/userinfo')
 //10、用户登出](#10用户登出)
 export const reqLoginOut = () => ajax('/api/logout')
+
+// 店铺详情页面 goods/ratings/shopinfo
+export const reqShopGoods = () => ajax('/goods')
+export const reqShopRatings = () => ajax('/ratings')
+export const reqShopInfo = () => ajax('/info')

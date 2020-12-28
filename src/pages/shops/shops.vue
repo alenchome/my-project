@@ -13,6 +13,9 @@
 <script>
   import shophead from '../../components/shophead/shophead.vue'
 	export default{
+    mounted() {
+      this.$store.dispatch('shopinfo')
+    },
 		name: 'shops',
     components: {
       shophead

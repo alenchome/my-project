@@ -8,7 +8,10 @@ import {
   RECEIVE_LOGINSMS,
   RECEIVE_LOGINPWD,
   RECEIVE_LOGINOUT,
-  RECEIVE_USERINFO
+  RECEIVE_USERINFO,
+  RECEIVE_SHOPINFO,
+  RECEIVE_SHOPGOODS,
+  RECEIVE_SHOPRATINGS
 } from './mutation-types.js'
 
 export default {
@@ -34,7 +37,14 @@ export default {
   },
   [RECEIVE_USERINFO](state, {userinfo}) {
     state.userinfo = userinfo
-  }
-
-
+  },
+  [RECEIVE_SHOPINFO](state, {shopinfo}) {
+    state.shopinfo = shopinfo
+  },
+  [RECEIVE_SHOPGOODS](state, {shopgoods}) {
+    state.shopgoods = shopgoods
+  },
+  [RECEIVE_SHOPRATINGS](state, {shopratings}) {
+    state.shopratings = shopratings
+  },
 }
