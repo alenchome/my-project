@@ -17,11 +17,11 @@
     	<div class="headinfo"  @click="isshow=!isshow">
     		<div class="shoptitle">
     			<div class="shopname">
-    				<h3 class="ellipsis">黑皮牛杂</h3>
-    				<p class="ellipsis">蓝骑士专送 约30分钟 · 月售193 · 可自取</p>
+    				<h3 class="ellipsis">{{ shopinfo.name }}</h3>
+    				<p class="ellipsis">{{shopinfo.description}} 约{{shopinfo.deliveryTime}}分钟 · 月售{{shopinfo.sellCount}} · 可自取</p>
     			</div>
     			<div class="shoplogo">
-    				<img src="../../../build/logo.png" width="60" height="60"/>
+    				<img :src="shopinfo.avatar" width="60" height="60"/>
     			</div>
     		</div>
     		<div class="packet">
@@ -29,7 +29,7 @@
     		</div>
     		<div class="minus">
     			<span>39减30 | 98减70 | 159减128</span><span>天天神券</span><span>0.02折起</span>
-    			<p class="ellipsis">公告：本店承诺：所有食材每日更新！坚持三不原则：所有食材不久放，所有烧烤不炸，所有炒菜不用微波炉转一圈出餐！现做现卖！如需快速出餐，请提前点餐！</p>
+    			<p class="ellipsis">{{shopinfo.bulletin}}</p>
     		    <div class="moreinfo iconfont icon-arrow-down"></div>
     		</div>
     	</div>
@@ -79,13 +79,11 @@
         </div>
         <div class="activity">
         	<h4>优惠活动</h4>
-        	<p><span>满减</span> 满17减16，满55减25，满100减42</p>
-        	<p><span>特价</span> 特价商品0.1元气</p>
-        	<p><span>奖励</span> 30内下5单得￥5店铺红包</p>
+        	<p v-for="(items,index) in shopinfo.supports"><span :class="color[items.type]">{{items.name}}</span>{{items.content}}</p>
         </div>
         <div class="notice">
         	<h4>公告</h4>
-        	<p>公告：本店承诺：所有食材每日更新！坚持三不原则：所有食材不久放，所有烧烤不炸，所有炒菜不用微波炉转一圈出餐！现做现卖！如需快速出餐，请提前点餐！</p>
+        	<p>{{shopinfo.bulletin}}</p>
         </div>
       </div>
     </div>
@@ -94,12 +92,17 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   export default {
     name: 'shophead',
     data: function(){
       return {
-        isshow: true
+        isshow: true,
+        color: ['green','red','orange']
       }
+    },
+    computed: {
+      ...mapState(['shopinfo'])
     }
   }
 </script>
@@ -325,9 +328,20 @@
   }
   .activity span{
   	padding: 1px 5px;
-  	border: 1px solid red;
   	border-radius: 5px;
   	margin-right: 10px;
   	font-size: 11px;
+  }
+  .green{
+    border: 1px solid green;
+    color: green;
+  }
+  .red{
+    border: 1px solid red;
+    color: red;
+  }
+  .orange{
+    border: 1px solid orange;
+    color: orange;
   }
 </style>

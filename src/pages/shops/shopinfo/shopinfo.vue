@@ -2,26 +2,28 @@
   <div class="shopstory">
   	<div class="delivery">
   		<h4>配送信息</h4>
-  		<p><span>蜂鸟配送</span>由商家配送提供配送，距离1000米</p>
-  		<p>配送费用 ￥4</p>
+  		<p><span>{{shopinfo.description}}</span>由商家配送提供配送，距离{{shopinfo.distance}}</p>
+  		<p>配送费用 ￥{{shopinfo.deliveryPrice}}</p>
   	</div>
   	<div class="shop-service">
   		<h4>活动与服务</h4>
-  		<p><span>首单</span>新用户下单立减17元（不与其他活动同享）</p>
-  		<p><span>满减</span>满39减15，满65减35</p>
-  		<p><span>特价</span>【立减19.5】欢乐小食谱</p>
-  		<p><span>特价</span>【立减19.5】欢乐小食谱</p>
-  		<p><span>特价</span>【立减19.5】欢乐小食谱</p>
-  		<p><span>特价</span>【立减19.5】欢乐小食谱</p>
-  		<p><span>特价</span>【立减19.5】欢乐小食谱</p>
-  		<p><span>特价</span>【立减19.5】欢乐小食谱</p>
+  		<p v-for="(items , index) in shopinfo.supports" :key='index'><span :class="color[items.type]">{{items.name}}</span>{{items.content}}</p>
   	</div>
   </div>
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   export default {
-    name: 'shopinfo'
+    name: 'shopinfo',
+    data: function(){
+      return {
+        color: ['green','red','orange']
+      }
+    },
+    computed: {
+      ...mapState(['shopinfo'])
+    }
   }
 </script>
 
@@ -45,8 +47,19 @@
   }
   .shop-service p span{
   	padding: 0 3px;
-  	border: 1px solid orange;
   	margin-right: 5px;
-  	color: orangered;
+    border-radius: 2px;
+  }
+  .green{
+    border: 1px solid green;
+    color: green;
+  }
+  .red{
+    border: 1px solid red;
+    color: red;
+  }
+  .orange{
+    border: 1px solid orange;
+    color: orange;
   }
 </style>
